@@ -14,6 +14,41 @@ return {
     "rcarriga/nvim-notify",
   },
   config = function()
-    require("noice").setup()
+    -- require("noice").setup()
+    require("noice").setup({
+        views = {
+          cmdline_popup = {
+            position = {
+              row = 2,
+              col = "50%",
+            },
+            size = {
+              width = 70,
+              height = "auto",
+            },
+          },
+          popupmenu = {
+            enabled = true, -- enables the Noice popupmenu UI
+            ---@type 'nui'|'cmp'
+            backend = "cmp", -- backend to use to show regular cmdline completions
+            relative = "editor",
+            position = {
+              row = 5,
+              col = "50%",
+            },
+            size = {
+              width = 60,
+              height = 10,
+            },
+            border = {
+              style = "rounded",
+              padding = { 0, 1 },
+            },
+            win_options = {
+              winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+            },
+          },
+        },
+      })
   end
 }

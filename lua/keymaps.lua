@@ -8,7 +8,6 @@ vim.g.maplocalleader = " "
 
 -- Remap <esc>
 keymap.set('i', 'jj', '<esc>')
-keymap.set('v', '<leader>jj', '<esc>')
 
 -- Enter command mode quicker
 keymap.set({'n', 'v'}, ';', ':')
@@ -56,7 +55,6 @@ keymap.set('n', ',p', '"0p')
 keymap.set('n', ',P', '"0P')
 
 -- NEOVIDE SPECIFIC
-
 -- Enable zoom in/out
 if vim.g.neovide == true then
   vim.api.nvim_set_keymap("n", "<C-=>", ":lua vim.g.neovide_scale_factor = math.min(vim.g.neovide_scale_factor + 0.1,  1.0)<CR>", { silent = true })

@@ -3,6 +3,10 @@ return {
   --  tag = '0.1.5',
   branch = '0.1.x',
   dependencies = {
+    "nvim-telescope/telescope-live-grep-args.nvim" ,
+    -- This will not install any breaking changes.
+    -- For major updates, this must be adjusted manually.
+    version = "^1.0.0",
     'nvim-lua/plenary.nvim',
     -- { 'nvim-telescope/telescope-fzf-native.nvim', build = 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
   },
@@ -15,14 +19,19 @@ return {
     -- map telescope.nvim keybindings
     vim.keymap.set('n', '<C-p>', builtin.find_files, {}) -- find files
     vim.keymap.set('n', '<C-b>', builtin.buffers, {}) -- view open buffers
-    vim.keymap.set('n', '<C-n>', builtin.live_grep, {}) -- global search?
-    vim.keymap.set('n', '<C-t>', builtin.treesitter, {}) -- global search?
+    -- vim.keymap.set('n', '<C-n>', builtin.live_grep, {}) -- global search
+    vim.keymap.set('n', '<C-n>', "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {}) -- global search with args
+    -- vim.keymap.set('n', '<C-t>', builtin.treesitter, {}) -- global search
+    vim.keymap.set('n', '<C-t>', builtin.lsp_document_symbols, {}) -- see file overview
+    -- vim.keymap.set('n', '<C->', builtin.oldfiles, {}) -- view list of last searched files
+    -- vim.keymap.set('n', '<C->', builtin.grep_string, {}) -- search files for string under cursor
+
 
     telescope.setup({
       defaults = {
         layout_strategy = 'vertical',
         layout_config = {
-          vertical = { width = 0.7, height = 0.7 },
+          vertical = { width = 0.9, height = 0.9 },
           -- preview_cutoff = 999,
           -- other layout configuration here
         },
@@ -75,9 +84,11 @@ return {
       -- other configuration values here
     })
 
-    vim.cmd('Telescope find_files')
+    -- AvW - auto open telescope when nvim starts.
+    -- vim.cmd('Telescope find_files')
 
     -- telescope.load_extension("fzf")
+    telescope.load_extension("live_grep_args")
 
   end
 }

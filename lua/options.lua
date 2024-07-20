@@ -1,6 +1,5 @@
 -- CUSTOM OPTIONS
 -- disable netrw at the very start of your init.lua
-
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -19,6 +18,8 @@ vim.opt.tabstop = 2 -- two spaces for tab
 vim.opt.shiftwidth = 2 -- two spaces for tab
 
 vim.opt.clipboard = "unnamedplus" -- sync with system clipboard
+-- set clipboard=unnamedplus
+-- vim.opt.clipboard:append { 'unnamed', 'unnamedplus' }
 
 vim.opt.virtualedit = "block" -- allow virtual block mode to ignore line limitations
 
@@ -33,35 +34,19 @@ vim.opt.termguicolors = true -- enable true color support 24bit
 
 vim.opt.cursorline = true -- enable line curor line highligt
 
--- default terminal
--- vim.g.terminal_emulator = 'powershell'
--- vim.api.nvim_set_var('terminal_emulator', 'powershell')
--- vim.opt.shell = 'powershell.exe'
-
-
--- SETUP POWERSHELL FOR TOGGLETERM
--- local powershell_options = {
---   shell = vim.fn.executable "pwsh" == 1 and "pwsh" or "powershell",
---   -- shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
---   shellcmdflag = "-NoLogo -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
---   shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
---   shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
---   shellquote = "",
---   shellxquote = "",
--- }
---
--- for option, value in pairs(powershell_options) do
---   vim.opt[option] = value
--- end
-
 -- SETUP GIT BASH FOR TOGGLETERM
-vim.cmd [[let &shell = '"C:/Program Files/Git/bin/sh.exe"']]
-vim.cmd [[let &shellcmdflag = '-s']]
+-- Windows Powershell
+-- vim.cmd [[let &shell = '"C:/Program Files/Git/bin/sh.exe"']]
+-- vim.cmd [[let &shellcmdflag = '-s']]
 
+-- Linux Fish shell
+vim.opt.shell = '/usr/bin/fish'
+
+-- CURSOR STYLING
 -- vim.o.guicursor = 'n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20,i:block-blinkwait700-blinkoff400-blinkon250-Cursor/lCursor'
 -- vim.o.guicursor = 'n:highlight Cursor gui=NONE guifg=#ff000 guibg=#00ff00'
 
--- backup
+-- AUTO BACKUPS
 vim.opt.backup = false
 vim.opt.swapfile = false
 
