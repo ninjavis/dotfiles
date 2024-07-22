@@ -19,3 +19,16 @@ vim.api.nvim_create_autocmd('Filetype', {
 	pattern = { 'html' },
   command = 'setlocal shiftwidth=4 tabstop=4'
 })
+
+-- Fix Nvim Tree issues when restoring session. Sometimes Nvim Tree opens up weirdly or is an empty buffer.
+vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+  pattern = 'NvimTree*',
+  callback = function()
+    local api = require('nvim-tree.api')
+    local view = require('nvim-tree.view')
+
+    if not view.is_visible() then
+      api.tree.open()
+    end
+  end,
+})
