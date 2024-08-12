@@ -3,6 +3,15 @@
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
+vim.opt.belloff = "all" -- disable sounds
+vim.opt.hidden = false -- keep buffers in memory
+
+-- code folding
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.o.foldlevelstart = 99
+vim.opt.foldtext = "" -- syntax highlight first line of folded text
+
 vim.opt.signcolumn = "yes" -- show two columns for line numbers and symbols( prevents shifting )
 
 vim.opt.number = true -- show line number
@@ -32,7 +41,7 @@ vim.opt.incsearch = true
 vim.opt.ignorecase = true
 vim.opt.termguicolors = true -- enable true color support 24bit
 
-vim.opt.cursorline = true -- enable line curor line highligt
+vim.opt.cursorline = true -- enable line cursor line highligt
 
 -- SETUP GIT BASH FOR TOGGLETERM
 -- Windows Powershell

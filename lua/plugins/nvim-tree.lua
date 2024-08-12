@@ -18,8 +18,10 @@ return {
     -- configure nvim-tree
     nvimtree.setup({
       view = {
-        width = 35,
+        -- width = 35,
         -- relativenumber = true,
+        -- adaptive_size = false, -- Auto Resize Tree to fit file name
+        centralize_selection = true
       },
       -- change folder arrow icons
       renderer = {
@@ -44,6 +46,7 @@ return {
       -- window splits
       actions = {
         open_file = {
+          -- resize_window = true,
           window_picker = {
             enable = false,
           },
@@ -55,6 +58,9 @@ return {
       git = {
         ignore = false,
       },
+      -- modified = {
+      --   enable = true
+      -- }
     })
 
     -- set keymaps
@@ -64,5 +70,11 @@ return {
     keymap.set("n", "<leader>ef", "<cmd>NvimTreeFindFileToggle<CR>", { desc = "Toggle file explorer on current file" }) -- toggle file explorer on current file
     keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
     keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
+
+    -- Resize Nvim Tree width
+    keymap.set('n', '<leader>eg', ':NvimTreeResize 100<CR>', { noremap = true, silent = true })
+    keymap.set('n', '<leader>es', ':NvimTreeResize 35<CR>', { noremap = true, silent = true })
+
   end,
+
 }

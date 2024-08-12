@@ -1,3 +1,6 @@
+-- General Settings
+local general = vim.api.nvim_create_augroup("General", { clear = true })
+
 -- Remove all trailing whitespaces in buffer on save
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
     pattern = {"*"},
@@ -32,3 +35,56 @@ vim.api.nvim_create_autocmd({ 'BufEnter' }, {
     end
   end,
 })
+
+-- Remove auto comment new line
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    vim.opt.formatoptions:remove { "c", "r", "o" }
+  end,
+  group = general,
+  desc = "Disable New Line Comment",
+})
+
+-- Auto expand Nvim-Tree when it receives focus, and disable when losing focus
+-- NOT WORKING YET
+-- local group = vim.api.nvim_create_augroup("nvim_tree", { clear = true })
+
+-- vim.api.nvim_create_autocmd({ 'BufEnter' }, {
+--   -- pattern = 'NvimTree*',
+--   pattern = "NvimTreeBuf",
+--   callback = function()
+--     print("TreeOpen 3")
+--     -- local api = require('nvim-tree.api')
+--     local view = require('nvim-tree.view')
+--
+--     view.adaptive_resize = true
+--   end,
+-- })
+
+-- vim.api.nvim_create_autocmd("BufEnter", {
+--     pattern = "NvimTreeBuf",
+--     callback = function()
+--     print("buf entering")
+--         require("nvim-tree").setup({
+--             force = true,
+--             view = {
+--                 adaptive_resize = true,
+--             },
+--         })
+--     end,
+--     group = group,
+-- })
+--
+-- vim.api.nvim_create_autocmd("BufLeave", {
+--     pattern = "NvimTreeBuf",
+--     callback = function()
+--     print("buf leaving")
+--         require("nvim-tree").setup({
+--             force = true,
+--             view = {
+--                 adaptive_resize = false,
+--             },
+--         })
+--     end,
+--     group = group,
+-- })

@@ -64,3 +64,28 @@ if vim.g.neovide == true then
   vim.api.nvim_set_keymap("n", "<C-0>", ":lua vim.g.neovide_scale_factor = 0.5<CR>", { silent = true })
   vim.api.nvim_set_keymap("n", "<C-)>", ":lua vim.g.neovide_transparency = 0.9<CR>", { silent = true })
 end
+
+
+-- local function toggle_adaptive_size()
+--   return "<cmd>lua require('nvim-tree.view').View.adaptive_size = not require('nvim-tree.view').View.adaptive_size"
+-- end
+--
+-- keymap.set('n', '<leader>a', toggle_adaptive_size()'<CR>')
+
+
+-- local function avcw(func)
+  -- return "<Cmd>lua require('nvim-tree.view').adaptive_size = not require('nvim-tree.view').adaptive_size<CR>"
+-- end
+
+-- keymap.set('n', '<leader>a', avcw())
+
+-- local currentSize = require('nvim-tree.view').view.adaptive_size;
+
+-- local sizer = require('nvim-tree.view').adaptive_size = not require('nvim-tree.view').adaptive_size;
+-- local tele = "require('telescope.builtin')"
+
+-- local function disp()
+ -- print( currentSize)
+-- end
+
+-- keymap.set('n', '<leader>a', disp()'<cr>')
