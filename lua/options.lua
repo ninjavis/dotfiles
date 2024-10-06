@@ -4,7 +4,7 @@ vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
 vim.opt.belloff = "all" -- disable sounds
-vim.opt.hidden = false -- keep buffers in memory
+-- vim.opt.hidden = false -- keep buffers in memory
 
 -- code folding
 vim.wo.foldmethod = 'expr'
