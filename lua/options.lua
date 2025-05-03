@@ -7,15 +7,15 @@ vim.opt.belloff = "all" -- disable sounds
 -- vim.opt.hidden = false -- keep buffers in memory
 
 -- code folding
-vim.wo.foldmethod = 'expr'
-vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.wo.foldmethod = "expr"
+vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.o.foldlevelstart = 99
 vim.opt.foldtext = "" -- syntax highlight first line of folded text
 
 vim.opt.signcolumn = "yes" -- show two columns for line numbers and symbols( prevents shifting )
 
 vim.opt.number = true -- show line number
-vim.opt.relativenumber = true -- show relative line number from cursor
+vim.opt.relativenumber = false -- show relative line number from cursor
 
 vim.opt.splitbelow = true -- when opening, for instance :help, split the window by default below
 vim.opt.splitright = true -- default horizontal split to the right
@@ -49,7 +49,7 @@ vim.opt.cursorline = true -- enable line cursor line highligt
 -- vim.cmd [[let &shellcmdflag = '-s']]
 
 -- Linux Fish shell
-vim.opt.shell = '/usr/bin/fish'
+vim.opt.shell = "/usr/bin/fish"
 
 -- CURSOR STYLING
 -- vim.o.guicursor = 'n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20,i:block-blinkwait700-blinkoff400-blinkon250-Cursor/lCursor'
@@ -110,23 +110,21 @@ shada = "NONE" -- disable nvim-data/shada folder containing persistent data for 
 
 -- NEOVIDE specific settings
 if vim.g.neovide then
+	vim.g.neovide_padding_top = 0
+	vim.g.neovide_padding_bottom = 0
+	vim.g.neovide_padding_right = 0
+	vim.g.neovide_padding_left = 0
 
-  vim.g.neovide_padding_top = 0
-  vim.g.neovide_padding_bottom = 0
-  vim.g.neovide_padding_right = 0
-  vim.g.neovide_padding_left = 0
+	vim.g.neovide_scroll_animation_length = 0.2
 
-  vim.g.neovide_scroll_animation_length = 0.2
+	vim.g.neovide_hide_mouse_when_typing = true
 
-  vim.g.neovide_hide_mouse_when_typing = true
+	vim.g.neovide_unlink_border_highlights = true
 
-  vim.g.neovide_unlink_border_highlights = true
+	vim.g.neovide_refresh_rate = 144
 
-  vim.g.neovide_refresh_rate = 144
+	-- vim.g.neovide_profiler = true
 
-  -- vim.g.neovide_profiler = true
-
-  vim.g.neovide_cursor_animation_length = 0.1
-  vim.g.neovide_cursor_trail_size = 0.5
-
+	vim.g.neovide_cursor_animation_length = 0.1
+	vim.g.neovide_cursor_trail_size = 0.5
 end
