@@ -49,7 +49,10 @@ vim.opt.cursorline = true -- enable line cursor line highligt
 -- vim.cmd [[let &shellcmdflag = '-s']]
 
 -- Linux Fish shell
-vim.opt.shell = "/usr/bin/fish"
+-- vim.opt.shell = "/usr/bin/fish"
+
+-- Linux Bash shell
+vim.opt.shell = "/usr/bin/bash"
 
 -- CURSOR STYLING
 -- vim.o.guicursor = 'n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20,i:block-blinkwait700-blinkoff400-blinkon250-Cursor/lCursor'
