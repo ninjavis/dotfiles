@@ -73,16 +73,16 @@ return {
           { "filetype" },
         },
         lualine_y = {
-            {
-                function()
-                    for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-                        if vim.api.nvim_buf_get_option(buf, 'modified') then
-                            return 'UNSAVED ' -- any message or icon
-                        end
-                    end
-                    return ''
-                end,
-            },
+          {
+            function()
+              for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+                if vim.api.nvim_get_option_value('modified', { buf = buf }) then
+                  return 'UNSAVED ' -- any message or icon
+                end
+              end
+              return ''
+            end,
+          },
         },
       },
     })

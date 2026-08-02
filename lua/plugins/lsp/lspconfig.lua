@@ -1,4 +1,3 @@
--- LIST of lsp server names https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#html
 return {
   "neovim/nvim-lspconfig",
   event = { "BufReadPre", "BufNewFile" },
@@ -7,179 +6,155 @@ return {
     { "antosha417/nvim-lsp-file-operations", config = true },
   },
   config = function()
-    -- import lspconfig plugin
-    local lspconfig = require("lspconfig")
-
-    -- import cmp-nvim-lsp plugin
+    -- local lspconfig = require("lspconfig")
     local cmp_nvim_lsp = require("cmp_nvim_lsp")
+    local keymap = vim.keymap
+    -- local util = require("lspconfig.util")
 
-    local keymap = vim.keymap -- for conciseness
+    -- ==========================================================
+    -- GLOBAL LSP KEYBINDS (Modern LspAttach Pattern)
+    -- ==========================================================
+    vim.api.nvim_create_autocmd("LspAttach", {
+      group = vim.api.nvim_create_augroup("UserLspConfig", {}),
+      callback = function(ev)
+        local opts = { buffer = ev.buf, noremap = true, silent = true }
 
-    local opts = { noremap = true, silent = true }
-    local on_attach = function(client, bufnr)
-      opts.buffer = bufnr
+        opts.desc = "Show LSP references"
+        keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts)
+        opts.desc = "Go to declaration"
+        keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+        opts.desc = "Show LSP definitions"
+        keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts)
+        opts.desc = "Show LSP implementations"
+        keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts)
+        opts.desc = "Show LSP type definitions"
+        keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts)
+        opts.desc = "See available code actions"
+        keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
+        opts.desc = "Smart rename"
+        keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+        opts.desc = "Show buffer diagnostics"
+        keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts)
+        opts.desc = "Show line diagnostics"
+        keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+        opts.desc = "Go to previous diagnostic"
+        keymap.set("n", "[d", function() vim.diagnostic.jump({ count = -1, float = true }) end, opts)
+        opts.desc = "Go to next diagnostic"
+        keymap.set("n", "]d", function() vim.diagnostic.jump({ count = 1, float = true }) end, opts)
+        opts.desc = "Show documentation"
+        keymap.set("n", "K", vim.lsp.buf.hover, opts)
+        opts.desc = "Restart LSP"
+        keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts)
 
-      -- set keybinds
-      opts.desc = "Show LSP references"
-      keymap.set("n", "gR", "<cmd>Telescope lsp_references<CR>", opts) -- show definition, references
+        -- Create the :Org command ONLY for TypeScript/JavaScript files
+        local ft = vim.bo[ev.buf].filetype
+        if ft == "typescript" or ft == "typescriptreact" or ft == "javascript" or ft == "javascriptreact" then
+          vim.api.nvim_buf_create_user_command(ev.buf, "Org", function()
+            vim.lsp.buf.execute_command({
+              command = "_typescript.organizeImports",
+              arguments = { vim.api.nvim_buf_get_name(ev.buf) },
+              title = ""
+            })
+          end, { desc = "Organize Imports" })
+        end
 
-      opts.desc = "Go to declaration"
-      keymap.set("n", "gD", vim.lsp.buf.declaration, opts) -- go to declaration
+      end,
+    })
 
-      opts.desc = "Show LSP definitions"
-      keymap.set("n", "gd", "<cmd>Telescope lsp_definitions<CR>", opts) -- show lsp definitions
-
-      opts.desc = "Show LSP implementations"
-      keymap.set("n", "gi", "<cmd>Telescope lsp_implementations<CR>", opts) -- show lsp implementations
-
-      opts.desc = "Show LSP type definitions"
-      keymap.set("n", "gt", "<cmd>Telescope lsp_type_definitions<CR>", opts) -- show lsp type definitions
-
-      opts.desc = "See available code actions"
-      keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts) -- see available code actions, in visual mode will apply to selection
-
-      opts.desc = "Smart rename"
-      keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts) -- smart rename
-
-      opts.desc = "Show buffer diagnostics"
-      keymap.set("n", "<leader>D", "<cmd>Telescope diagnostics bufnr=0<CR>", opts) -- show  diagnostics for file
-
-      opts.desc = "Show line diagnostics"
-      keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts) -- show diagnostics for line
-
-      opts.desc = "Go to previous diagnostic"
-      keymap.set("n", "[d", vim.diagnostic.goto_prev, opts) -- jump to previous diagnostic in buffer
-
-      opts.desc = "Go to next diagnostic"
-      keymap.set("n", "]d", vim.diagnostic.goto_next, opts) -- jump to next diagnostic in buffer
-
-      opts.desc = "Show documentation for what is under cursor"
-      keymap.set("n", "K", vim.lsp.buf.hover, opts) -- show documentation for what is under cursor
-
-      opts.desc = "Restart LSP"
-      keymap.set("n", "<leader>rs", ":LspRestart<CR>", opts) -- mapping to restart lsp if necessary
-    end
-
-    -- used to enable autocompletion (assign to every lsp server config)
     local capabilities = cmp_nvim_lsp.default_capabilities()
 
-    -- Change the Diagnostic symbols in the sign column (gutter)
-    -- (not in youtube nvim video)
-    local signs = { Error = " ", Warn = " ", Hint = "󰠠 ", Info = " " }
-    for type, icon in pairs(signs) do
-      local hl = "DiagnosticSign" .. type
-      vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = "" })
-    end
-
-    -- ===========
-    -- A special setup is required for Angular to work. We point to the local project node_modules dir where angular language server resides
-    -- First make sure angularls is installed via :Mason
-    -- ===========
-    local ok, mason_registry = pcall(require, 'mason-registry')
-    if not ok then
-        vim.notify 'mason-registry could not be loaded'
-        return
-    end
-
-    local angularls_path =
-        mason_registry.get_package('angular-language-server'):get_install_path()
-
-    local cmd = {
-        'ngserver',
-        '--stdio',
-        '--tsProbeLocations',
-        table.concat({
-            angularls_path,
-            vim.fn.getcwd(),
-        }, ','),
-        '--ngProbeLocations',
-        table.concat({
-            angularls_path .. '/node_modules/@angular/language-server',
-            vim.fn.getcwd(),
-        }, ','),
-    }
-
-    local angularlsconfig = {
-        cmd = cmd,
-        capabilities = capabilities,
-        on_attach = on_attach,
-        on_new_config = function(new_config, new_root_dir)
-            new_config.cmd = cmd
-        end,
-    }
-
-    -- Remove unused imports and sort.
-    local function organize_imports()
-      local params = {
-        command = "_typescript.organizeImports",
-        arguments = {vim.api.nvim_buf_get_name(0)},
-        title = ""
-      }
-      vim.lsp.buf.execute_command(params)
-    end
-
-    lspconfig["angularls"].setup( angularlsconfig )
-
-    -- configure rust server
-    -- lspconfig["rust_analyzer"].setup({
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    -- })
-
-    -- configure gopls server
-    -- lspconfig["gopls"].setup({
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    -- })
-
-    -- configure html server
-    lspconfig["html"].setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
+    -- Modern Diagnostic Configuration (Neovim 0.11+)
+    vim.diagnostic.config({
+      update_in_insert = true,
+      severity_sort = true,
+      -- Unified Signs (Replaces sign_define)
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = " ",
+          [vim.diagnostic.severity.WARN]  = " ",
+          [vim.diagnostic.severity.HINT]  = "󰠠 ",
+          [vim.diagnostic.severity.INFO]  = " ",
+        },
+      },
+      float = {
+        border = "rounded",
+        source = "always",
+      },
     })
-    -- configure typescript server with plugin
-    lspconfig["ts_ls"].setup({
+
+    -- ==========================================================
+    -- SERVER CONFIGURATIONS
+    -- ==========================================================
+
+    -- ANGULAR SETUP
+    -- We use a function for 'cmd' to avoid the "nil" error on startup
+    vim.lsp.config("angularls", {
       capabilities = capabilities,
-      on_attach = on_attach,
-      commands = {
-        OrganizeImports = {
-          organize_imports,
-          description = "Organize Imports"
+      on_new_config = function(new_config, new_root_dir)
+        local mr = require("mason-registry")
+        local angularls_path = vim.fn.stdpath("data") .. "/mason/packages/angular-language-server"
+
+        -- Try to get the dynamic path from Mason if available
+        pcall(function()
+          if mr.has_package("angular-language-server") then
+            angularls_path = mr.get_package("angular-language-server"):get_install_path()
+          end
+        end)
+
+        new_config.cmd = {
+          "ngserver",
+          "--stdio",
+          "--tsProbeLocations",
+          table.concat({ angularls_path, new_root_dir }, ","),
+          "--ngProbeLocations",
+          table.concat({ angularls_path .. "/node_modules/@angular/language-server", new_root_dir }, ","),
         }
-      }
+      end,
     })
 
-    -- configure css server
-    lspconfig["cssls"].setup({
+    -- HTML
+    vim.lsp.config("html", { capabilities = capabilities })
+
+    -- TypeScript
+    vim.lsp.config("ts_ls", {
       capabilities = capabilities,
-      on_attach = on_attach,
     })
 
-    -- configure tailwindcss server
-    -- lspconfig["tailwindcss"].setup({
-    --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    -- })
+    -- CSS
+    vim.lsp.config("cssls", { capabilities = capabilities })
 
-    -- configure emmet language server
-    lspconfig["emmet_ls"].setup({
+    -- Emmet
+    vim.lsp.config("emmet_ls", {
       capabilities = capabilities,
-      on_attach = on_attach,
       filetypes = { "html", "typescriptreact", "javascriptreact", "css", "sass", "scss", "less", "svelte" },
     })
 
-    -- configure lua server (with special settings)
-    -- lspconfig["lua_ls"].setup({
+    -- Lua (fixes "undefined global vim")
+    vim.lsp.config("lua_ls", {
+      settings = {
+        Lua = {
+          runtime = { version = 'LuaJIT' },
+          diagnostics = { globals = { 'vim' } },
+          workspace = {
+            checkThirdParty = false,
+            library = {
+              vim.env.VIMRUNTIME,
+              -- This line is key for fixing the fs_stat warning
+              "${3rd}/luv/library"
+            },
+          },
+        },
+      },
+    })
+
+    -- vim.lsp.config("lua_ls", {
     --   capabilities = capabilities,
-    --   on_attach = on_attach,
-    --   settings = { -- custom settings for lua
+    --   settings = {
     --     Lua = {
-    --       -- make the language server recognize "vim" global
     --       diagnostics = {
     --         globals = { "vim" },
     --       },
     --       workspace = {
-    --         -- make language server aware of runtime files
     --         library = {
     --           [vim.fn.expand("$VIMRUNTIME/lua")] = true,
     --           [vim.fn.stdpath("config") .. "/lua"] = true,
@@ -189,5 +164,16 @@ return {
     --   },
     -- })
 
-  end
+    -- Auto run :Org on save.
+    -- TODO: requires attention. :Org executes, but file does not save.
+    -- vim.api.nvim_create_autocmd("BufWritePre", {
+    --   pattern = { "*.ts", "*.js" },
+    --   callback = function()
+    --     vim.cmd("Org")
+    --   end,
+    -- })
+
+    -- ENABLE ALL
+    vim.lsp.enable({ "angularls", "html", "ts_ls", "cssls", "emmet_ls", "lua_ls" })
+  end,
 }

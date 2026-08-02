@@ -8,7 +8,7 @@ return {
     "windwp/nvim-ts-autotag", -- https://github.com/windwp/nvim-ts-autotag auto close tags ( html etc. )
   },
   config = function()
-    require("nvim-treesitter.configs").setup({
+    require("nvim-treesitter").setup({
       highlight = { enable = true },
       indent = { enable = true },
       auto_install = true,
