@@ -13,18 +13,21 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 vim.lsp.config("*", { capabilities = capabilities })
 --
 
+-- LUA LSP
 -- fixes 'vim.xyz' undefined global in lua_ls
 vim.lsp.config("lua_ls", {
-    settings = {
-        Lua = {
-            diagnostics = { globals = { "vim" } },
-        },
+  settings = {
+    Lua = {
+      diagnostics = { globals = { "vim" } },
     },
+  },
 })
+
 --
+
 vim.lsp.enable({
-    "lua_ls",
-    -- "marksman",
-    -- "gopls",
-    -- "rust_analyzer",
+  "lua_ls",
+  -- "marksman",
+  "gopls",
+  -- "rust_analyzer",
 })
