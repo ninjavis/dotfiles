@@ -25,7 +25,8 @@ vim.opt.splitbelow = true -- when opening, for instance :help, split the window 
 vim.opt.splitright = true -- default horizontal split to the right
 
 vim.opt.wrap = false -- disable line wrapping
-vim.opt.smartindent = true -- auto indent?
+vim.opt.smartindent = true --  indent, indents new line automatically
+vim.opt.autoindent = true -- auto indent, copies current line's indent to new line?
 
 -- indentation/tabbing
 vim.opt.expandtab = true -- convert tabs to spaces
@@ -52,7 +53,13 @@ vim.opt.termguicolors = true -- enable true color support 24bit
 
 vim.opt.cursorline = true -- enable line cursor line highlight
 
-vim.o.cmdheight = 0 -- only show command line when command is typed
+-- vim.o.cmdheight = 0 -- only show command line when command is typed
+vim.o.autocomplete = true
+vim.opt.completeopt = {'noselect', 'menuone', 'noinsert'}
+-- vim.opt.completeopt = {'menuone'}
+
+-- vim.o.winborder = "rounded"
+
 
 -- SETUP GIT BASH FOR TOGGLETERM
 -- Windows Powershell
