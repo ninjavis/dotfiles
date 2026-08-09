@@ -25,7 +25,10 @@ vim.pack.add({
   -- 4. Bufferline
   { src = "https://github.com/akinsho/bufferline.nvim", load = true },
   { src = "https://github.com/nvim-tree/nvim-web-devicons", load = true },
-  { src = "https://github.com/nvim-mini/mini.bufremove", load = true }
+  { src = "https://github.com/nvim-mini/mini.bufremove", load = true },
+
+  -- 5. Lualine
+  { src = "https://github.com/nvim-lualine/lualine.nvim", load = true }
 })
 
 -- Now that load = true forces them onto the runtime path, your modules can load safely!
@@ -37,3 +40,5 @@ require("telescope_config")
 require("autopairs_config")
 -- bufferline
 require("bufferline_config")
+-- lualine
+require("lualine_config")
