@@ -1,6 +1,32 @@
 -- CUSTOM OPTIONS
+-- PERFORMANCE OPTIMIZATIONS
 vim.opt.timeoutlen = 300
 vim.opt.updatetime = 250
+
+-- Disables writing swap files to disk entirely
+-- Relies on persistent memory, significantly reducing continuous disk I/O lag
+vim.opt.swapfile = false
+
+-- Disables creating backup files before overwriting a file
+vim.opt.backup = false
+vim.opt.writebackup = false
+
+-- Optimizes scrolling performance over SSH or slow terminal renderers
+-- Keeps the UI from redrawing while macro layouts or intensive scripts run
+vim.opt.lazyredraw = true
+
+-- Completely bypasses Neovim's slow internal fallback regex engine
+-- Forces Neovim to strictly prioritize the lightning-fast NFA regex engine
+-- vim.opt.regexpengine = 1
+
+vim.opt.maxmempattern = 5000
+vim.opt.redrawtime = 5000
+
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+-- vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+
 
 -- disable netrw at the very start of your init.lua
 vim.g.netrw_banner = 0
@@ -76,10 +102,6 @@ vim.opt.shell = "/usr/bin/bash"
 -- CURSOR STYLING
 -- vim.o.guicursor = 'n-v-c-sm:block,ci-ve:ver25,r-cr-o:hor20,i:block-blinkwait700-blinkoff400-blinkon250-Cursor/lCursor'
 -- vim.o.guicursor = 'n:highlight Cursor gui=NONE guifg=#ff000 guibg=#00ff00'
-
--- AUTO BACKUPS
-vim.opt.backup = false
-vim.opt.swapfile = false
 
 -- set formatoptions-=cro
 -- vim.opt_local.formatoptions:remove({'c', 'r', 'o' })

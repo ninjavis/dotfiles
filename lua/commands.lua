@@ -125,3 +125,32 @@ vim.api.nvim_create_autocmd("BufLeave", {
   end,
 })
 
+-- Handle large files - disable performance killers for files larger than 1mb
+vim.api.nvim_create_autocmd("BufReadPre", {
+  pattern = "*",
+  callback = function()
+    local max_filesize = 1024 * 1024 -- 1 Megabyte ceiling
+    local check_file = vim.fn.expand("<afile>")
+    local status, stats = pcall(vim.uv.fs_stat, check_file)
+
+    -- If the file is massive, turn off the heavy features instantly
+    if status and stats and stats.size > max_filesize then
+      vim.opt_local.swapfile = false
+      vim.opt_local.bufhidden = "unload"
+      vim.opt_local.undolevels = -1
+
+      -- Disable heavy UI rendering elements for this buffer
+      vim.opt_local.foldmethod = "manual"
+      vim.opt_local.relativenumber = false
+
+      -- Stop matchparen plugin from scanning matching brackets on large file scroll
+      vim.g.loaded_matchparen = 1
+
+      -- Scheduled safety cleanup once the buffer is open
+      vim.schedule(function()
+        vim.cmd("syntax off") -- Kill classic regex syntax highlighting
+      end)
+    end
+  end,
+})
+
