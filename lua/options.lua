@@ -1,5 +1,7 @@
 -- CUSTOM OPTIONS
--- vim.opt.timeoutlen = 200
+vim.opt.timeoutlen = 300
+vim.opt.updatetime = 250
+
 -- disable netrw at the very start of your init.lua
 vim.g.netrw_banner = 0
 -- vim.g.loaded_netrw = 1
@@ -56,7 +58,6 @@ vim.opt.cursorline = true -- enable line cursor line highlight
 -- vim.o.cmdheight = 0 -- only show command line when command is typed
 vim.o.autocomplete = true
 vim.opt.completeopt = {'noselect', 'menuone', 'noinsert'}
--- vim.opt.completeopt = {'menuone'}
 
 -- vim.o.winborder = "rounded"
 

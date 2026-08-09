@@ -61,6 +61,35 @@ keymap.set("x", "p", '[["_dP]]')
 keymap.set("n", ",p", '"0p')
 keymap.set("n", ",P", '"0P')
 
+-- AUTOCOMPLETE SUGGESTIONS
+-- intercept Enter key if autocomplete menu is open so that cursor does not jump to next line after selecting suggestion.
+keymap.set('i', '<CR>', function()
+  if vim.fn.pumvisible() ~= 0 then
+    return '<C-y>'
+  else
+    return '<CR>'
+  end
+end, { expr = true, noremap = true })
+
+-- Navigate autosuggestions down with Ctrl+j
+vim.keymap.set('i', '<C-j>', function()
+  if vim.fn.pumvisible() ~= 0 then
+    return '<C-n>'
+  else
+    return '<C-j>'
+  end
+end, { expr = true, noremap = true })
+
+-- Navigate autosuggestions up with Ctrl+k
+vim.keymap.set('i', '<C-k>', function()
+  if vim.fn.pumvisible() ~= 0 then
+    return '<C-p>'
+  else
+    return '<C-k>'
+  end
+end, { expr = true, noremap = true })
+
+
 -- NEOVIDE SPECIFIC
 -- Enable zoom in/out
 -- if vim.g.neovide == true then

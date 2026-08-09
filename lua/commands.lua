@@ -55,3 +55,34 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- end
   end,
 })
+
+vim.api.nvim_create_autocmd("CompleteDone", {
+  callback = function()
+    -- Get the completed item details
+    local completed_item = vim.v.completed_item
+    -- local user_data = completed_item.user_data
+
+    -- Exit early if no item was selected
+    if not completed_item or not completed_item.kind then
+      return
+    end
+
+    -- 1. Append brackets after Method/Function is selected in autocomplete + move cursor inside.
+    if completed_item.kind == "Function" or completed_item.kind == "Method" then
+      -- Insert brackets and move the cursor left into them
+      -- Using feedkeys ensures it behaves natively as if typed
+      vim.api.nvim_feedkeys(
+        vim.api.nvim_replace_termcodes("()<Left>", true, false, true),
+        "n",
+        true
+      )
+    end
+
+    -- 2. Defer signature help slightly so Neovim settles into the new cursor position first
+    vim.schedule(function()
+      vim.lsp.buf.signature_help()
+    end)
+
+  end,
+})
+
