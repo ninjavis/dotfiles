@@ -89,6 +89,17 @@ vim.keymap.set('i', '<C-k>', function()
   end
 end, { expr = true, noremap = true })
 
+-- Bufferline
+keymap.set("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>")
+keymap.set("n", "<S-l>", "<cmd>BufferLineCycleNext<cr>")
+keymap.set("n", "<A-h>", "<cmd>BufferLineMovePrev<cr>")
+keymap.set("n", "<A-l>", "<cmd>BufferLineMoveNext<cr>")
+-- { "<leader>bp", "<Cmd>BufferLineTogglePin<CR>", desc = "Toggle pin" },
+-- { "<leader>bP", "<Cmd>BufferLineGroupClose ungrouped<CR>", desc = "Delete non-pinned buffers" },
+-- { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", desc = "Delete other buffers" },
+-- { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete buffers to the right" },
+-- { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete buffers to the left" },
+
 
 -- NEOVIDE SPECIFIC
 -- Enable zoom in/out

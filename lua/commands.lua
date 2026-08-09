@@ -23,7 +23,6 @@ vim.api.nvim_create_user_command("PackUpdate", function(opts)
   end
 end, { nargs = "*", desc = "Update all plugins or specific ones" })
 
-
 vim.api.nvim_create_autocmd('LspAttach', {
   group = vim.api.nvim_create_augroup('my.lsp', {}),
   callback = function(ev)
@@ -83,6 +82,46 @@ vim.api.nvim_create_autocmd("CompleteDone", {
       vim.lsp.buf.signature_help()
     end)
 
+  end,
+})
+
+-- 1. TURN OFF autocomplete when entering a Telescope prompt
+-- Create an isolated group to cleanly manage Telescope autocompletion overrides
+local telescope_complete_grp = vim.api.nvim_create_augroup("TelescopeAutoCompleteToggle", { clear = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "TelescopePrompt",
+  group = telescope_complete_grp,
+  callback = function()
+    -- Disable the global auto-trigger loop completely while searching
+    vim.o.autocomplete = false
+
+    -- Clear fallback variables out of this buffer safely
+    vim.bo.omnifunc = ""
+    vim.bo.completefunc = ""
+
+    -- Safely local-bind navigation mappings inside this specific Telescope window
+    local opts = { silent = true, buffer = true }
+    vim.keymap.set("i", "<Tab>", function()
+      require("telescope.actions").move_selection_next(vim.api.nvim_get_current_buf())
+    end, opts)
+
+    vim.keymap.set("i", "<S-Tab>", function()
+      require("telescope.actions").move_selection_previous(vim.api.nvim_get_current_buf())
+    end, opts)
+  end,
+})
+
+-- 2. TURN ON autocomplete when leaving the Telescope prompt buffer
+vim.api.nvim_create_autocmd("BufLeave", {
+  pattern = "*",
+  group = telescope_complete_grp,
+  callback = function()
+    -- Check if the buffer we are exiting is actually Telescope
+    if vim.bo.filetype == "TelescopePrompt" then
+      -- Safely restore global auto-triggers so coding files get suggestions back
+      vim.o.autocomplete = true
+    end
   end,
 })
 
