@@ -18,33 +18,20 @@ vim.pack.add({
     build = function() vim.fn.system({'make'}) end,
     load = true
   },
-  { src = "https://github.com/nvim-telescope/telescope-file-browser.nvim", load = true } -- allows for browsing directories/directory specific search
+  { src = "https://github.com/nvim-telescope/telescope-file-browser.nvim", load = true }, -- allows for browsing directories/directory specific search
+
+  -- 3. Autopairs
+  { src = "https://github.com/windwp/nvim-autopairs", load = true }
 })
 
 -- Now that load = true forces them onto the runtime path, your modules can load safely!
+-- lsp
 require("lsp")
+-- telescope
 require("telescope_config") -- Make sure to load your separate telescope setup file here!
+-- autopairs
+require("autopairs_config")
 
--- vim.pack.add({
---   "https://github.com/neovim/nvim-lspconfig", -- provides default language server configs
---   "https://github.com/mason-org/mason.nvim",  -- manage lsps
---
---   -- telescope
---   'nvim-lua/plenary.nvim',
---   {
---     'nvim-telescope/telescope.nvim', version = '*',
---   },
---   {
---     'nvim-telescope/telescope-fzf-native.nvim', build = 'make'
---   }
---
---   -- glyphs
---   -- 'nvim-tree/nvim-web-devicons',
---
--- })
---
--- -- lsp
 -- require("lsp")
 --
--- -- telescope
 -- -- require("telescope_config")
