@@ -1,3 +1,6 @@
+-- General Settings
+local general = vim.api.nvim_create_augroup("General", { clear = true })
+
 -- custom user commands for managing pack plugins.
 -- Will most likely just use PackUpdate to update either specific plugins or all of them.
 vim.api.nvim_create_user_command("PackAdd", function(opts)
@@ -22,6 +25,25 @@ vim.api.nvim_create_user_command("PackUpdate", function(opts)
     vim.pack.update()
   end
 end, { nargs = "*", desc = "Update all plugins or specific ones" })
+
+-- Remove all trailing whitespaces in buffer on save
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*" },
+  callback = function(_)
+    local save_cursor = vim.fn.getpos(".")
+    vim.cmd([[%s/\s\+$//e]])
+    vim.fn.setpos(".", save_cursor)
+  end,
+})
+
+-- Remove auto comment new line
+vim.api.nvim_create_autocmd("BufEnter", {
+  callback = function()
+    vim.opt.formatoptions:remove { "c", "r", "o" }
+  end,
+  group = general,
+  desc = "Disable New Line Comment",
+})
 
 -- vim.api.nvim_create_autocmd('LspAttach', {
 --   group = vim.api.nvim_create_augroup('my.lsp', {}),
@@ -153,4 +175,3 @@ vim.api.nvim_create_autocmd("BufReadPre", {
     end
   end,
 })
-
