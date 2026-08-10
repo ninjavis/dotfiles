@@ -31,11 +31,14 @@ vim.pack.add({
   { src = "https://github.com/nvim-lualine/lualine.nvim", load = true },
 
   -- 6. Blink - autocompletion
-  -- { src = "https://github.com/saghen/blink.cmp", load = true, version = "1.*" }
-  { 
-    src = "https://github.com/Saghen/blink.cmp", 
+  {
+    src = "https://github.com/Saghen/blink.cmp",
     version = vim.version.range("1.*") -- Pins a major release version to fetch prebuilt binaries
-  }
+  },
+
+  -- 7.
+  { src = "https://github.com/nvim-tree/nvim-tree.lua", load = true },
+
 })
 
 -- Now that load = true forces them onto the runtime path, your modules can load safely!
@@ -51,3 +54,5 @@ require("bufferline_config")
 require("lualine_config")
 -- blink
 require("blink_config")
+-- nvim-tree
+require("nvim_tree_config")

@@ -63,31 +63,31 @@ keymap.set("n", ",P", '"0P')
 
 -- AUTOCOMPLETE SUGGESTIONS
 -- intercept Enter key if autocomplete menu is open so that cursor does not jump to next line after selecting suggestion.
-keymap.set('i', '<CR>', function()
-  if vim.fn.pumvisible() ~= 0 then
-    return '<C-y>'
-  else
-    return '<CR>'
-  end
-end, { expr = true, noremap = true })
+-- keymap.set('i', '<CR>', function()
+--   if vim.fn.pumvisible() ~= 0 then
+--     return '<C-y>'
+--   else
+--     return '<CR>'
+--   end
+-- end, { expr = true, noremap = true })
 
 -- Navigate autosuggestions down with Ctrl+j
-vim.keymap.set('i', '<C-j>', function()
-  if vim.fn.pumvisible() ~= 0 then
-    return '<C-n>'
-  else
-    return '<C-j>'
-  end
-end, { expr = true, noremap = true })
+-- vim.keymap.set('i', '<C-j>', function()
+--   if vim.fn.pumvisible() ~= 0 then
+--     return '<C-n>'
+--   else
+--     return '<C-j>'
+--   end
+-- end, { expr = true, noremap = true })
 
 -- Navigate autosuggestions up with Ctrl+k
-vim.keymap.set('i', '<C-k>', function()
-  if vim.fn.pumvisible() ~= 0 then
-    return '<C-p>'
-  else
-    return '<C-k>'
-  end
-end, { expr = true, noremap = true })
+-- vim.keymap.set('i', '<C-k>', function()
+--   if vim.fn.pumvisible() ~= 0 then
+--     return '<C-p>'
+--   else
+--     return '<C-k>'
+--   end
+-- end, { expr = true, noremap = true })
 
 -- Bufferline
 keymap.set("n", "<S-h>", "<cmd>BufferLineCyclePrev<cr>")
@@ -99,6 +99,16 @@ keymap.set("n", "<A-l>", "<cmd>BufferLineMoveNext<cr>")
 -- { "<leader>bo", "<Cmd>BufferLineCloseOthers<CR>", desc = "Delete other buffers" },
 -- { "<leader>br", "<Cmd>BufferLineCloseRight<CR>", desc = "Delete buffers to the right" },
 -- { "<leader>bl", "<Cmd>BufferLineCloseLeft<CR>", desc = "Delete buffers to the left" },
+
+-- Nvim-tree
+keymap.set("n", "<leader>ee", "<cmd>NvimTreeToggle<CR>", { desc = "Toggle file explorer" }) -- toggle file explorer
+keymap.set("n", "<leader>ef", "<cmd>NvimTreeFindFileToggle<CR>", { desc = "Toggle file explorer on current file" }) -- toggle file explorer on current file
+keymap.set("n", "<leader>ec", "<cmd>NvimTreeCollapse<CR>", { desc = "Collapse file explorer" }) -- collapse file explorer
+keymap.set("n", "<leader>er", "<cmd>NvimTreeRefresh<CR>", { desc = "Refresh file explorer" }) -- refresh file explorer
+
+-- Resize Nvim Tree width
+keymap.set('n', '<leader>eg', ':NvimTreeResize 100<CR>', { noremap = true, silent = true })
+keymap.set('n', '<leader>es', ':NvimTreeResize 35<CR>', { noremap = true, silent = true })
 
 
 -- NEOVIDE SPECIFIC
