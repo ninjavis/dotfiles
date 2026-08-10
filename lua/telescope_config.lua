@@ -1,6 +1,7 @@
 -- 1. Run the main telescope setup
--- require('telescope').setup()
-require('telescope').setup({
+local tscope = require("telescope")
+
+tscope.setup({
   defaults = {
     mappings = {
       i = {
@@ -20,6 +21,8 @@ require('telescope').setup({
   }
 })
 
+tscope.load_extension("live_grep_args")
+
 -- 2. Load the native FZF extension (compiled by vim.pack)
 pcall(require('telescope').load_extension, 'fzf')
 pcall(require('telescope').load_extension, 'file_browser') -- Loads the browser
@@ -33,7 +36,53 @@ vim.keymap.set('n', '<C-n>', builtin.live_grep, { desc = 'Telescope live grep' }
 vim.keymap.set('n', '<C-b>', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>D',"<cmd>Telescope diagnostics bufnr=0<CR>", { desc = 'Telescope help tags' })
 
-vim.keymap.set('n', '<C-m>', ':Telescope file_browser<CR>', { desc = 'Telescope open file browser' }) -- does not work if netrw is open, only if file is open
+-- Live Grep with Args allows for searching specific folders and files
+local function live_grep_current_dir_args()
+  -- 1. Get the absolute directory path of the active buffer
+  local absolute_buffer_dir = vim.fs.dirname(vim.fn.expand('%:p'))
+  local project_root = vim.fn.getcwd()
+
+  local relative_dir = ""
+
+  -- 2. Manually strip the project root prefix from the absolute path
+  if absolute_buffer_dir:sub(1, #project_root) == project_root then
+    -- Extract everything after the project root path
+    relative_dir = absolute_buffer_dir:sub(#project_root + 1)
+    -- Remove a leading slash if it exists (e.g., "/src/components" -> "src/components")
+    if relative_dir:sub(1, 1) == "/" then
+      relative_dir = relative_dir:sub(2)
+    end
+  end
+
+  -- 3. Clean up evaluation edge cases and add trailing slash
+  if relative_dir == "" or relative_dir == "." then
+    relative_dir = ""
+  else
+    relative_dir = relative_dir .. "/"
+  end
+
+  -- 4. Construct the template string (Outputs exactly: "" -g "src/components/**")
+  local template_text = string.format('"" -g "%s**"', relative_dir)
+
+  -- 5. Calculate character shift back inside the quotes
+  -- local move_left_count = string.len(template_text) - 1
+  local cursor_escape = vim.api.nvim_replace_termcodes(string.format('<Left>', 0), true, false, true)
+
+  -- 6. Launch Telescope with deferred cursor positioning
+  require('telescope').extensions.live_grep_args.live_grep_args({
+    default_text = template_text,
+    attach_mappings = function(_, _)
+      vim.schedule(function()
+        vim.api.nvim_feedkeys(cursor_escape, 'm', true)
+      end)
+      return true
+    end
+  })
+end
+-- vim.keymap.set('n', '<C-n>', "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {}) -- global search with args
+vim.keymap.set('n', '<C-m>', live_grep_current_dir_args, { desc = 'Telescope live grep with search directory of current buffer'}) -- global search with args
+
+-- vim.keymap.set('n', '<C-m>', ':Telescope file_browser<CR>', { desc = 'Telescope open file browser' }) -- does not work if netrw is open, only if file is open
 
 -- Telescope file_browser default keymaps
 -- <A-c>/c 	  create	              Create file/folder at current path (trailing path separator creates folder)

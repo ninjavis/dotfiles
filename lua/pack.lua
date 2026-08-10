@@ -12,6 +12,10 @@ vim.pack.add({
     load = true
   },
   {
+    src = "https://github.com/nvim-telescope/telescope-live-grep-args.nvim",
+    load = true
+  },
+  {
     src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim",
     -- On install/update, vim.pack can fire a shell command to compile FZF
     build = function() vim.fn.system({'make'}) end,
