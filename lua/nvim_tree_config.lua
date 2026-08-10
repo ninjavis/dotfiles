@@ -28,6 +28,9 @@ require("nvim-tree").setup({
   -- explorer to work well with
   -- window splits
   actions = {
+    change_dir = {
+      restrict_above_cwd = true,
+    },
     open_file = {
       -- resize_window = true,
       window_picker = {
