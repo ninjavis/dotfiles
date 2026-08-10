@@ -7,6 +7,7 @@ require("nvim-tree").setup({
   },
   -- change folder arrow icons
   renderer = {
+    root_folder_label = false,
     indent_markers = {
       enable = true,
     },
@@ -35,7 +36,7 @@ require("nvim-tree").setup({
     },
   },
   filters = {
-    custom = { ".DS_Store" },
+    custom = { ".DS_Store", "^.git$" },
   },
   git = {
     ignore = false,
