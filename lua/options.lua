@@ -82,8 +82,8 @@ vim.opt.termguicolors = true -- enable true color support 24bit
 vim.opt.cursorline = true -- enable line cursor line highlight
 
 -- vim.o.cmdheight = 0 -- only show command line when command is typed
-vim.o.autocomplete = true
-vim.opt.completeopt = {'noselect', 'menuone', 'noinsert'}
+-- vim.o.autocomplete = true
+-- vim.opt.completeopt = {'noselect', 'menuone', 'noinsert'}
 
 -- vim.o.winborder = "rounded"
 
