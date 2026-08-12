@@ -75,7 +75,19 @@ vim.lsp.config('vtsls', {
   filetypes = { 'typescript', 'javascript' },
 })
 
-vim.lsp.enable('vtsls')
+vim.lsp.config('gopls', {
+  settings = {
+    gopls = {
+      analyses = {
+        unusedparams = true,
+        unusedfunc = true,
+      },
+      staticcheck = true,
+      -- This ensures gopls processes changes as you type
+      diagnosticsTrigger = "Edit",
+    },
+  },
+})
 
 -- HTML
 -- vim.lsp.config("html", { capabilities = capabilities })

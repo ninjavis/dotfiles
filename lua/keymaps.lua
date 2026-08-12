@@ -61,6 +61,9 @@ keymap.set("x", "p", '[["_dP]]')
 keymap.set("n", ",p", '"0p')
 keymap.set("n", ",P", '"0P')
 
+-- Remap <C-/> to the same as <C-z>, which minimizes the active nvim instance.
+keymap.set({ "n", "v", "x", "o" }, "<C-\\>", "<C-z>")
+
 -- AUTOCOMPLETE SUGGESTIONS
 -- intercept Enter key if autocomplete menu is open so that cursor does not jump to next line after selecting suggestion.
 -- keymap.set('i', '<CR>', function()

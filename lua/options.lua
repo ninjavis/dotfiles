@@ -1,6 +1,6 @@
 -- CUSTOM OPTIONS
 -- PERFORMANCE OPTIMIZATIONS
-vim.opt.timeoutlen = 300
+vim.opt.timeoutlen = 600 -- controls how long nvim waits to complete a key sequence
 vim.opt.updatetime = 250
 
 -- Disables writing swap files to disk entirely

@@ -3,6 +3,12 @@ local tscope = require("telescope")
 
 tscope.setup({
   defaults = {
+    layout_strategy = 'vertical',
+    layout_config = {
+      vertical = { width = 0.97, height = 0.97 },
+      -- preview_cutoff = 999,
+      -- other layout configuration here
+    },
     mappings = {
       i = {
         ["<C-h>"] = "which_key"
@@ -62,7 +68,7 @@ local function live_grep_current_dir_args()
   end
 
   -- 4. Construct the template string (Outputs exactly: "" -g "src/components/**")
-  local template_text = string.format('"" -g "%s**"', relative_dir)
+  local template_text = string.format('"xwxw" -g "%s**"', relative_dir)
 
   -- 5. Calculate character shift back inside the quotes
   -- local move_left_count = string.len(template_text) - 1
@@ -79,10 +85,13 @@ local function live_grep_current_dir_args()
     end
   })
 end
--- vim.keymap.set('n', '<C-n>', "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {}) -- global search with args
-vim.keymap.set('n', '<C-m>', live_grep_current_dir_args, { desc = 'Telescope live grep with search directory of current buffer'}) -- global search with args
 
--- vim.keymap.set('n', '<C-m>', ':Telescope file_browser<CR>', { desc = 'Telescope open file browser' }) -- does not work if netrw is open, only if file is open
+-- can't set keymap below to <C-m> because <C-m> maps to <CR> automatically
+vim.keymap.set('n', '<C-g>', live_grep_current_dir_args, { desc = 'Telescope live grep with search directory of current buffer'}) -- global search with args
+
+-- vim.keymap.set('n', '<C-n>', "<cmd>lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", {}) -- global search with args
+
+-- vim.keymap.set('n', '<C-b>', ':Telescope file_browser<CR>', { desc = 'Telescope open file browser' }) -- does not work if netrw is open, only if file is open
 
 -- Telescope file_browser default keymaps
 -- <A-c>/c 	  create	              Create file/folder at current path (trailing path separator creates folder)

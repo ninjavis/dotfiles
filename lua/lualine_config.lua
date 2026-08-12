@@ -24,5 +24,13 @@ require("lualine").setup({
         end,
       },
     },
+    lualine_z = {
+      -- Custom time component
+      {
+        function()
+          return os.date('%H:%M') -- Displays 24-hour time (e.g., "14:30")
+        end,
+      },
+    }
   }
 })
