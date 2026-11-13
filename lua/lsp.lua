@@ -75,6 +75,7 @@ vim.lsp.config('vtsls', {
   filetypes = { 'typescript', 'javascript' },
 })
 
+-- GOLANG
 vim.lsp.config('gopls', {
   settings = {
     gopls = {
@@ -86,6 +87,27 @@ vim.lsp.config('gopls', {
       -- This ensures gopls processes changes as you type
       diagnosticsTrigger = "Edit",
     },
+  },
+  -- make gopls recognize templ workspace files
+  flags = {
+    allow_incremental_sync = true,
+  },
+})
+
+-- GOLANG TEMPL
+vim.lsp.config("templ", {
+  cmd = { "templ", "lsp" },
+  filetypes = { "templ" },
+  root_marker = { "go.mod", ".git" },
+  -- prevent templ and gopls from fighting over formatting
+  on_attach = function(client, _)
+    -- This prevents conflicting format requests between the two servers
+    client.server_capabilities.documentFormattingProvider = true
+  end
+})
+vim.filetype.add({
+  extension = {
+    templ = "templ",
   },
 })
 
@@ -110,5 +132,6 @@ vim.lsp.enable({
   "lua_ls",
   -- "marksman",
   "gopls",
+  "templ"
   -- "rust_analyzer",
 })

@@ -41,6 +41,8 @@ vim.keymap.set('n', '<C-p>', builtin.find_files, { desc = 'Telescope find files'
 vim.keymap.set('n', '<C-n>', builtin.live_grep, { desc = 'Telescope live grep' })
 vim.keymap.set('n', '<C-b>', builtin.buffers, { desc = 'Telescope buffers' })
 vim.keymap.set('n', '<leader>D',"<cmd>Telescope diagnostics bufnr=0<CR>", { desc = 'Telescope help tags' })
+-- vim.keymap.set({'n','v'}, '<leader>ca', ':Telescope lsp_code_actions<CR>', { desc = 'LSP code action' }) // gives unknown command
+vim.keymap.set({'n','v'}, '<leader>ca', vim.lsp.buf.code_action, { desc = 'LSP code action' })
 
 -- Live Grep with Args allows for searching specific folders and files
 local function live_grep_current_dir_args()
