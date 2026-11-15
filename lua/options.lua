@@ -13,7 +13,7 @@ vim.opt.writebackup = false
 
 -- Optimizes scrolling performance over SSH or slow terminal renderers
 -- Keeps the UI from redrawing while macro layouts or intensive scripts run
-vim.opt.lazyredraw = true
+-- vim.opt.lazyredraw = true
 
 -- Completely bypasses Neovim's slow internal fallback regex engine
 -- Forces Neovim to strictly prioritize the lightning-fast NFA regex engine
@@ -24,7 +24,7 @@ vim.opt.redrawtime = 5000
 
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
--- vim.g.loaded_node_provider = 0
+vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 
 
@@ -107,7 +107,7 @@ vim.opt.shell = "/usr/bin/bash"
 -- vim.opt_local.formatoptions:remove({'c', 'r', 'o' })
 
 ---@diagnostic disable-next-line: undefined-global, lowercase-global
-shada = "NONE" -- disable nvim-data/shada folder containing persistent data for shared instances of nvim
+vim.opt.shada = "" -- disable nvim-data/shada folder containing persistent data for shared instances of nvim
 
 -- vim.cmd [[
 --     highlight nCursor guifg=#752f4d guibg=#ba7cbb

@@ -28,13 +28,23 @@ end, { nargs = "*", desc = "Update all plugins or specific ones" })
 
 -- Remove all trailing whitespaces in buffer on save
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  group = general,
   pattern = { "*" },
-  callback = function(_)
-    local save_cursor = vim.fn.getpos(".")
-    vim.cmd([[%s/\s\+$//e]])
-    vim.fn.setpos(".", save_cursor)
+  callback = function()
+    local view = vim.fn.winsaveview()
+    vim.cmd([[keeppatterns %s/\s\+$//e]])
+    vim.fn.winrestview(view)
   end,
+  desc = "Remove trailing whitespace on save",
 })
+-- vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+--   pattern = { "*" },
+--   callback = function(_)
+--     local save_cursor = vim.fn.getpos(".")
+--     vim.cmd([[%s/\s\+$//e]])
+--     vim.fn.setpos(".", save_cursor)
+--   end,
+-- })
 
 -- Remove auto comment new line
 vim.api.nvim_create_autocmd("BufEnter", {
